@@ -1,6 +1,6 @@
 #define MAX_TEXT        1024
 #define MAX_RATINGS     3
-#define MAX_CATAGORIES  6
+#define MAX_CATAGORIES  12
 
 typedef struct {
     char            question[MAX_TEXT];  
@@ -23,6 +23,9 @@ public:
 
     void load_next_question();
     void load_prev_question();
+    void decode_xml_rating(bool *rating_array);
+    void decode_xml_catagory(bool *catagory_array);
+
     void save_changes();
     void undo_changes();
 

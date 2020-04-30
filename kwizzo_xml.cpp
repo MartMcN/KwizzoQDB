@@ -221,3 +221,21 @@ bool kwizzo_xml::kwizzo_xml_catagory(char *buffer)
     return true;
 }
 
+bool kwizzo_xml::kwizzo_xml_rating(char *buffer)
+{
+    XMLElement *rating = NULL;
+
+    rating = quizz->FirstChildElement("rating");
+
+	if(rating)
+	{
+    	const char *rating_txt = rating->GetText();
+
+    	strcpy(buffer, rating_txt);
+
+    	return true;
+	}
+
+	return false;
+}
+

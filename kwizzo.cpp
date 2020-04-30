@@ -14,13 +14,6 @@
 #define KWIZZO_MEDIUM   1
 #define KWIZZO_HARD     2
 
-// Catagory
-#define KWIZZO_CAT_ARTS_LIT     0
-#define KWIZZo_CAT_ENS          1
-#define KWIZZO_CAT_HISTORY      2
-#define KWIZZO_CAT_GEOGRAPHY    3
-#define KWIZZO_CAT_SCIENCE      4
-#define KIWIIZ_CAT_SPORTS       5
 
 struct catagory_entry{
     uint8_t cat_index;
@@ -29,13 +22,39 @@ struct catagory_entry{
 
 catagory_entry catagorys[MAX_CATAGORIES] = 
 {
-    {0, "ARTS & LIT"},
-    {1, "ENTS"},
-    {2, "HISTORY"},
-    {3, "GEOGRAPHY"},
-    {4, "SCIENCE"},
-    {5, "SPORT"}
+    {0,  "Geography"},
+    {1,  "Food & Drink"},
+    {2,  "History"},
+    {3,  "Music & Lyrics"},
+    {4,  "TV, Cinema & Radio"},
+    {5,  "Sport"},
+    {6,  "Maritime"},
+    {7,  "Animals, Plants & Botany"},
+    {8,  "Literature"},
+    {9,  "Science & Medicine"},
+    {10, "Arts"},
+    {11, "General Knowledge"}
 };
+
+//
+// "Geography"},
+// "Food &amp; Drink"bool kwizzo_xml::kwizzo_xml_rating(char *buffer)
+// "Animals, Plants &amp; Botany"
+// "Literature"
+// "Science &amp; Medicine"
+// "Arts"
+// "General Knowledge"
+//
+// catagory_entry catagorys[MAX_CATAGORIES] = 
+// {
+//     {0, "ARTS & LIT"},
+//     {1, "ENTS"},
+//     {2, "HISTORY"},
+//     {3, "GEOGRAPHY"},
+//     {4, "SCIENCE"},
+//     {5, "SPORT"}
+// };
+//
 
 
 kwizzo_question::kwizzo_question(kwizzo_xml *kwizzo_db)
@@ -49,10 +68,11 @@ kwizzo_question::kwizzo_question(kwizzo_xml *kwizzo_db)
 
     // Stick in some data now
     kwizzo_db->kwizzo_xml_next_quiz();
-    kwizzo_db->kwizzo_xml_next_quiz();
     kwizzo_db->kwizzo_xml_question(current.question);
     kwizzo_db->kwizzo_xml_answer(current.answer);
-
+    decode_xml_rating(current.rating);
+    decode_xml_catagory(current.catagory);
+    
     // Copy over to the edited version
     memcpy(&current_edited, &current, sizeof(kwizzo_question_t));
 }
@@ -77,11 +97,76 @@ void kwizzo_question::load_next_question()
 
     // Stick in some data now
     kwizzo_db->kwizzo_xml_next_quiz();
+
+    // Get the question and answer text
     kwizzo_db->kwizzo_xml_question(current.question);
     kwizzo_db->kwizzo_xml_answer(current.answer);
 
+    decode_xml_rating(current.rating);
+    decode_xml_catagory(current.catagory);
+
     // Copy over to the edited version
     memcpy(&current_edited, &current, sizeof(kwizzo_question_t));
+}
+
+
+void kwizzo_question::decode_xml_rating(bool *rating_array)
+{
+    // Clear the array
+    for (uint8_t index = 0; index < MAX_RATINGS; index++)
+    {
+        rating_array[index] = false;
+    }
+
+    // Attempt to read the XML rating element
+    char rating_txt[32];
+    memset(rating_txt, 0, 32);
+    
+    // Update the rating array
+    if(kwizzo_db->kwizzo_xml_rating(rating_txt))
+    {
+        if(strncmp(rating_txt, "EASY", 4))
+        {
+            rating_array[0] = true;
+        }
+        else if(strncmp(rating_txt, "MEDIUM", 4))
+        {
+            rating_array[1] = true;
+        }
+        else if(strncmp(rating_txt, "MEDIUM", 4))
+        {
+            rating_array[2] = true;
+        }
+    }
+
+}
+
+void kwizzo_question::decode_xml_catagory(bool *catagory_array)
+{
+    // Clear the array
+    for (uint8_t index = 0; index < MAX_CATAGORIES; index++)
+    {
+        catagory_array[index] = false;
+    }
+
+    // Attempt to read the XML catagory element
+    char catagory_txt[64];
+    memset(catagory_txt, 0, 64);
+    
+    // Update the rating array
+    if(kwizzo_db->kwizzo_xml_catagory(catagory_txt))
+    {
+        for(uint8_t index = 0; index < MAX_CATAGORIES; index++)
+
+        if(strncmp(catagory_txt, catagorys[index].cat_string, 4) == 0)
+        {
+            catagory_array[index] = true;
+        }
+        else
+        {
+            catagory_array[index] = false;
+        }
+    }
 }
 
 void kwizzo_question::load_prev_question()
@@ -99,11 +184,7 @@ void kwizzo_question::load_prev_question()
     memcpy(&current_edited, &current, sizeof(kwizzo_question_t));
 }
 
-
-/////////////
-////////////
-///////////
-
+//////////
 
 // BUTTONS FOR SELECTION
 #define COLOR_STD_BUTTON ((ImVec4)ImColor::HSV(0.57f, 0.5f, 0.3f))
@@ -146,14 +227,7 @@ void kwizzo_window::window()
 
     ImGui::SetWindowSize(ImVec2(window_width, 800));
 
-    //
-    //window_dimensions ImGui::GetWindowSize();
-    //window_dimensions
-    //if (ImGui::CollapsingHeader("kwizzo header"))
-    //{
-    //}
 
-    // Prev/Next Buttons
     kwizzo_windows_next_prev();
     ImGui::Separator();
 

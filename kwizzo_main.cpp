@@ -83,7 +83,6 @@ int main(int, char**)
 	kwizzo_xml *kwizzo_db;
 	kwizzo_db = new kwizzo_xml();
 
-
 	// kwizzo questions
 	kwizzo_question *ptr_kwizzo;
 	ptr_kwizzo = new kwizzo_question(kwizzo_db);
