@@ -216,15 +216,16 @@ void kwizzo_question::encode_xml_rating(bool *rating_array)
         {
             if(index == 0)
             {
-                strncpy(rating_txt, "EASY", 5);
+                strncpy_s(rating_txt, "EASY", 5);
             }
             else if (index == 1)
             {
-                strncpy(rating_txt, "MEDIUM", 7);
+                strncpy_s(rating_txt, "MEDIUM", 7);
             }
             else if (index == 2)
             {
-                strncpy(rating_txt, "HARD", 5);
+
+				strncpy_s(rating_txt, "HARD", 5);
             }
             
             break;

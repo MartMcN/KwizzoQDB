@@ -27,6 +27,9 @@
     <ClInclude Include="tinyxml2.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="kwizzo_ui.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="kwizzo.cpp">
@@ -57,6 +60,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="kwizzo_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kwizzo_ui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

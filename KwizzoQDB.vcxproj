@@ -91,7 +91,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\martinmc\Desktop\Projects\KwizzoQDB\imgui-master;C:\Users\martinmc\Desktop\Projects\KwizzoQDB\imgui-master\examples;C:\Users\martinmc\Desktop\Projects\SDL\SDL2-devel-2.0.12-VC\SDL2-2.0.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\imgui-master;.\imgui-master\examples;..\SDL\SDL2-devel-2.0.12-VC\SDL2-2.0.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,7 +126,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\martinmc\Desktop\Projects\KwizzoQDB\imgui-master;C:\Users\martinmc\Desktop\Projects\KwizzoQDB\imgui-master\examples;C:\Users\martinmc\Desktop\Projects\SDL\SDL2-devel-2.0.12-VC\SDL2-2.0.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\imgui-master;.\imgui-master\examples;..\SDL\SDL2-devel-2.0.12-VC\SDL2-2.0.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,6 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="kwizzo.h" />
+    <ClInclude Include="kwizzo_ui.h" />
     <ClInclude Include="kwizzo_xml.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="tinyxml2.h" />
@@ -171,6 +172,7 @@
     <ClCompile Include="imgui-master\imgui_widgets.cpp" />
     <ClCompile Include="kwizzo.cpp" />
     <ClCompile Include="kwizzo_main.cpp" />
+    <ClCompile Include="kwizzo_ui.cpp" />
     <ClCompile Include="kwizzo_xml.cpp" />
     <ClCompile Include="tinyxml2.cpp" />
   </ItemGroup>
