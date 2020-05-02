@@ -15,7 +15,7 @@
 #CXX = clang++
 
 EXE = KwizzoQDB
-SOURCES =  ./kwizzo_main.cpp ./kwizzo.cpp ./kwizzo_xml.cpp
+SOURCES =  ./kwizzo_main.cpp ./kwizzo.cpp ./kwizzo_ui.cpp ./kwizzo_xml.cpp
 SOURCES += ./imgui-master/imgui.cpp ./imgui-master/imgui_demo.cpp ./imgui-master/imgui_draw.cpp ./imgui-master/imgui_widgets.cpp
 SOURCES += ./imgui-master/examples/imgui_impl_sdl.cpp ./imgui-master/examples/imgui_impl_opengl2.cpp
 SOURCES += ./tinyxml2.cpp

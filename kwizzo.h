@@ -9,57 +9,34 @@ typedef struct {
     bool            catagory[MAX_CATAGORIES];
 } kwizzo_question_t;
 
-
-class kwizzo_xml;
-
 class kwizzo_question 
 {
 public:
     kwizzo_question(kwizzo_xml *kwizzo_db);
     ~kwizzo_question();
 
+
     kwizzo_question_t *get_current_question();
-    void update_current_question();
 
     void load_next_question();
     void load_prev_question();
-    void decode_xml_rating(bool *rating_array);
-    void decode_xml_catagory(bool *catagory_array);
-
-    void save_changes();
+    void save_question();
     void undo_changes();
 
-    kwizzo_question_t current_edited;
+    // ui support
+    uint8_t get_catagory_count();                       // Return the number of catagories
+    const char *get_catagory_text(uint8_t index);       // Returns the indicated catagory text
+
+
+    kwizzo_question_t current_edited;                   // question data for editing
 private:
-    kwizzo_question_t current;
+    kwizzo_question_t current;                          // question data read from the xml/db
     kwizzo_xml *kwizzo_db;
+
+    // xml support
+    void decode_xml_rating(bool *rating_array);
+    void decode_xml_catagory(bool *catagory_array);
+    void encode_xml_rating(bool *rating_array);
+    void encode_xml_catagory(bool *catagory_array);
 };
-
-///////////
-///////////
-///////////
-
-
-class kwizzo_window
-{
-public:
-    kwizzo_window(kwizzo_question *ptr, int width);
-    ~kwizzo_window();
-
-    void window();
-
-private:
-    // methods to draw components of the window
-    void kwizzo_windows_next_prev();
-    void kwizzo_window_question();
-    void kwizzo_window_rating();
-    void kwizzo_window_catagory();
-
-    // Pointer to the kwizzo question object
-    kwizzo_question *ptr_kwizzo_question;
-
-    // Windows width for dynamic resize
-    int  window_width;
-};
-
 

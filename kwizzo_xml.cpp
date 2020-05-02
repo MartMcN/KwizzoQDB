@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <iostream>
 #include "kwizzo_xml.h"
 
 #if defined( _MSC_VER ) || defined (WIN32)
@@ -209,33 +210,141 @@ bool kwizzo_xml::kwizzo_xml_answer(char *buffer)
     return true;
 }
 
-bool kwizzo_xml::kwizzo_xml_catagory(char *buffer)
+bool kwizzo_xml::kwizzo_xml_catagory(uint8_t index, char *buffer)
 {
     XMLElement *catagory;
+	const char *catagory_txt;
+	uint8_t count = 0;
 
-    catagory = quizz->FirstChildElement("catagory");
-    const char *catagory_txt = catagory->GetText();
+	catagory = quizz->FirstChildElement("catagory");
 
-    strcpy(buffer, catagory_txt);
-
-    return true;
-}
-
-bool kwizzo_xml::kwizzo_xml_rating(char *buffer)
-{
-    XMLElement *rating = NULL;
-
-    rating = quizz->FirstChildElement("rating");
-
-	if(rating)
+	while (count <= index)
 	{
-    	const char *rating_txt = rating->GetText();
+		if (catagory == NULL)
+			return false;
 
-    	strcpy(buffer, rating_txt);
+		if (count == index)
+		{
+			catagory_txt = catagory->GetText();
+			strcpy(buffer, catagory_txt);
+			return true;
+		}
+		else
+		{
+			catagory = catagory->NextSiblingElement("catagory");
+		}
 
-    	return true;
+		count++;
 	}
 
 	return false;
 }
 
+bool kwizzo_xml::kwizzo_xml_rating(char *buffer)
+{
+	XMLElement *rating = NULL;
+
+	rating = quizz->FirstChildElement("rating");
+
+	if (rating == NULL)
+	{
+		// There is no rating element so add it
+		rating = quizz->InsertNewChildElement("rating");
+
+		if (rating == NULL)
+		{
+			std::cout << __FILE__ << " Failed to create a element \"rating\"\n";
+			return false;
+		}
+
+		rating->SetText("UNKNOW");
+	}
+
+	const char *rating_txt = rating->GetText();
+	strcpy(buffer, rating_txt);
+
+	std::cout << __FILE__ << " Reading rating element : " << buffer << "\n";
+
+	return true;
+}
+
+bool kwizzo_xml::kwizzo_xml_delete_catagory()
+{
+    XMLElement *catagory = NULL;
+
+    catagory = quizz->FirstChildElement("catagory");
+
+	if(catagory == NULL)
+	{
+		// No catagory elements , job already done
+		return true;
+	}
+
+	while(catagory)
+	{
+		std::cout << __FILE__ " Deleting catagory\n";
+		quizz->DeleteChild(catagory);
+		catagory = quizz->FirstChildElement("catagory");
+	}
+
+	return true;
+}
+
+bool kwizzo_xml::kwizzo_xml_update_catagory(const char *buffer)
+{
+    XMLElement *catagory = NULL;
+
+    catagory = quizz->FirstChildElement("catagory");
+
+	while(1)
+	{
+		if (catagory == NULL)
+		{
+			// There is no catagory element so add it
+			catagory = quizz->InsertNewChildElement("catagory");
+
+			if (catagory == NULL)
+			{
+				std::cout << __FILE__ << " Cant create element catagory\n";
+				return false;
+			}
+
+			std::cout << __FILE__ << " New Catagory element text: " << buffer << "\n";
+			catagory->SetText(buffer);
+
+			return true;
+		}
+		else
+		{
+			std::cout << __FILE__ << " Catagory element text " << catagory->GetText() << "\n";
+			catagory = catagory->NextSiblingElement("catagory");
+		}
+	}
+}
+
+bool kwizzo_xml::kwizzo_xml_update_rating(const char *buffer)
+{
+    XMLElement *rating = NULL;
+
+	std::cout << __FILE__ << " update rating\n";
+
+
+    rating = quizz->FirstChildElement("rating");
+
+	if(rating == NULL)
+	{
+		// There is no rating element so add it
+		rating = quizz->InsertNewChildElement("rating");
+
+		std::cout << __FILE__ << "Created new rating element";
+
+		if(rating == NULL)
+			return false;
+
+	}
+	
+	std::cout << __FILE__ << " Updated rating element " << buffer << "\n";
+	rating->SetText(buffer);
+
+	return true;
+}
