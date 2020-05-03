@@ -1,3 +1,4 @@
+#include "iostream"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl2.h"
@@ -48,11 +49,15 @@ void kwizzo_window::window()
     window_postion.y = 0;
     ImGui::SetNextWindowPos(window_postion);
 
-    ImGui::Begin("KWIZZO!", &p_open, ImGuiWindowFlags_NoDecoration);
+    ImGui::Begin("KWIZZO!", &p_open, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_MenuBar);
 
     ImGui::SetWindowSize(ImVec2(window_width, 800));
 
+    // Menubar
+    kwizzo_menubar();
+    ImGui::Separator();
 
+    // Next / Prev / Undo
     kwizzo_windows_next_prev();
     ImGui::Separator();
 
@@ -70,8 +75,42 @@ void kwizzo_window::window()
     ImGui::End();
 }
 
+void kwizzo_window::kwizzo_menubar()
+{
+
+    if (ImGui::BeginMenuBar())
+    {
+        if (ImGui::BeginMenu("Menu"))
+        {
+            if (ImGui::MenuItem("New"))
+            {
+            }
+
+            if (ImGui::MenuItem("Open"))
+            {
+            }
+
+            ImGui::Separator();
+            if (ImGui::MenuItem("Save"))
+            {
+            }
+
+            if (ImGui::MenuItem("Quit", "Ctrl+Q"))
+            {
+            }
+
+            ImGui::EndMenu();
+        }
+
+        ImGui::EndMenuBar();
+    }
+}
+
+
 void kwizzo_window::kwizzo_windows_next_prev()
 {
+
+
     ImGui::PushStyleColor(ImGuiCol_Button, COLOR_OTHER_BUTTON);
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, COLOR_OTHER_HOVER);
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, COLOR_OTHER_ACTIVE);
@@ -90,7 +129,27 @@ void kwizzo_window::kwizzo_windows_next_prev()
         ptr_kwizzo_question->load_next_question();
     }
 
+    const float ItemSpacing = ImGui::GetStyle().ItemSpacing.x;
+    static float UndoButtonWidth = 50.0f; //The 100.0f is just a guess size for the first frame.
+
+    float pos = UndoButtonWidth + ItemSpacing;
+    ImGui::SameLine(ImGui::GetWindowWidth() - pos);
+
+    ImGui::Button("UNDO");
+    if(ImGui::IsItemActivated())
+    {
+        // reload the question
+        ptr_kwizzo_question->reload_question();
+    }
+
+    // Why this work???
+    UndoButtonWidth = ImGui::GetItemRectSize().x; //Get the actual width for next frame.
+
+
+
     ImGui::PopStyleColor(3);
+
+
 }
 
 void kwizzo_window::kwizzo_window_question()
@@ -221,3 +280,5 @@ void kwizzo_window::kwizzo_window_catagory()
 
     ImGui::PopStyleColor(1);
 }
+
+

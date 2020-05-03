@@ -3,7 +3,7 @@
 #define MAX_CATAGORIES  12
 
 typedef struct {
-    char            question[MAX_TEXT];  
+    char            question[MAX_TEXT];
     char            answer[MAX_TEXT];
     bool            rating[MAX_RATINGS];
     bool            catagory[MAX_CATAGORIES];
@@ -12,7 +12,7 @@ typedef struct {
 class kwizzo_question 
 {
 public:
-    kwizzo_question(kwizzo_xml *kwizzo_db);
+    kwizzo_question(kwizzo_xml *kwizzo_question_db);
     ~kwizzo_question();
 
 
@@ -20,6 +20,7 @@ public:
 
     void load_next_question();
     void load_prev_question();
+    void reload_question();
     void save_question();
     void undo_changes();
 

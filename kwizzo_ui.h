@@ -8,6 +8,7 @@ public:
 
 private:
     // methods to draw components of the window
+    void kwizzo_menubar();
     void kwizzo_windows_next_prev();
     void kwizzo_window_question();
     void kwizzo_window_rating();

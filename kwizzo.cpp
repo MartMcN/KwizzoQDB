@@ -26,11 +26,11 @@ catagory_entry catagorys[MAX_CATAGORIES] =
     {11, "General Knowledge"}
 };
 
-kwizzo_question::kwizzo_question(kwizzo_xml *kwizzo_db)
+kwizzo_question::kwizzo_question(kwizzo_xml *kwizzo_question_db)
 {
     // KWIZZO KWIZZO
     // Initalise the curent question
-    kwizzo_question::kwizzo_db = kwizzo_db;
+    kwizzo_db = kwizzo_question_db;
 
     memset(&current, 0, sizeof(kwizzo_question_t));
     memset(&current_edited, 0, sizeof(kwizzo_question_t));
@@ -104,6 +104,12 @@ void kwizzo_question::load_prev_question()
     decode_xml_catagory(current.catagory);
 
     // Copy over to the edited version
+    memcpy(&current_edited, &current, sizeof(kwizzo_question_t));
+}
+
+void kwizzo_question::reload_question()
+{
+    memset(&current_edited, 0, sizeof(kwizzo_question_t));
     memcpy(&current_edited, &current, sizeof(kwizzo_question_t));
 }
 
