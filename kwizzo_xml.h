@@ -3,7 +3,7 @@
 class kwizzo_xml
 {
 public:
-    kwizzo_xml();
+    kwizzo_xml(std::string xml_file_name);
     ~kwizzo_xml();
 
     bool kwizzo_xml_next_quiz();            // updates the quiz object pointer
@@ -20,6 +20,8 @@ public:
     bool kwizzo_xml_delete_catagory();                       // Deletes all the catagory elements from the question element
     bool kwizzo_xml_update_catagory(const char *buffer);    // Update the text of the question elment
     bool kwizzo_xml_update_rating(const char *buffer);      // Update the text of the question elment
+
+    bool kwizzo_xml_file_save(std::string file_name);
 
 private:
     tinyxml2::XMLDocument *doc;             // points to the doc

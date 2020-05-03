@@ -2,6 +2,9 @@
 #define MAX_RATINGS     3
 #define MAX_CATAGORIES  12
 
+#define XML_FILE_NAME             "./resources/quiz_2020_04_25_a.xml"
+#define XML_FILE_NAME_PARTIAL     "./resources/quiz"    
+
 typedef struct {
     char            question[MAX_TEXT];
     char            answer[MAX_TEXT];
@@ -23,6 +26,9 @@ public:
     void reload_question();
     void save_question();
     void undo_changes();
+
+    // File Operations
+    void save_file();
 
     // ui support
     uint8_t get_catagory_count();                       // Return the number of catagories

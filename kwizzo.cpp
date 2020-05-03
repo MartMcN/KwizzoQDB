@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <iostream>
+#include <fstream>
 #include <string.h>
 #include "kwizzo_xml.h"
 #include "kwizzo.h"
@@ -271,3 +272,65 @@ const char *kwizzo_question::get_catagory_text(uint8_t index)
 
     return catagorys[index].cat_string;
 }
+
+
+
+
+
+std::string datetime()
+{
+    time_t rawtime;
+    struct tm * timeinfo;
+    char buffer[80];
+
+    time (&rawtime);
+    timeinfo = localtime(&rawtime);
+
+    strftime(buffer,80,"%Y-%m-%d_%H-%M-%S",timeinfo);
+    return std::string(buffer);
+}
+
+
+bool filecopy(std::string fnamein, std::string fnameout)
+{
+    std::ifstream fin(fnamein, std::ios::binary);
+    if (!fin)
+    {
+        std::cout << "could not open input: " << fnamein << '\n';
+        return false;
+    }
+    std::ofstream fout(fnameout, std::ios::binary);
+    if (!fout)
+    {
+        std::cout << "could not open output: " << fnameout << '\n';
+        return false;
+    }    
+    fout << fin.rdbuf();
+    return bool(fout);
+}
+
+
+void file_backup()
+{
+    std::string savefile;
+
+    savefile = XML_FILE_NAME_PARTIAL + datetime() + ".xml";
+
+    filecopy(XML_FILE_NAME, savefile);
+}
+
+void kwizzo_question::save_file()
+{
+    // Save any updates to the current question
+    save_question();
+
+    // Before writing to the current file backup it up
+    file_backup();
+    
+    std::string filename;
+    filename.assign(XML_FILE_NAME);
+
+    // Call the TinyXML2 to write the XML file
+    kwizzo_db->kwizzo_xml_file_save(filename);
+}
+

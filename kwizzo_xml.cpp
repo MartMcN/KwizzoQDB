@@ -113,7 +113,7 @@ void NullLineEndings( char* p )
 }
 
 
-kwizzo_xml::kwizzo_xml()
+kwizzo_xml::kwizzo_xml(std::string xml_file_name)
 {
 #if defined(_MSC_VER) && defined(TINYXML2_DEBUG)
     _CrtMemCheckpoint(&startMemState);
@@ -130,7 +130,7 @@ kwizzo_xml::kwizzo_xml()
     }
 
     doc = new XMLDocument();
-    doc->LoadFile("./resources/quiz_2020_04_25_a.xml");
+    doc->LoadFile(xml_file_name.c_str());
 
     int errorID = doc->ErrorID();
 
@@ -347,4 +347,13 @@ bool kwizzo_xml::kwizzo_xml_update_rating(const char *buffer)
 	rating->SetText(buffer);
 
 	return true;
+}
+
+
+bool kwizzo_xml::kwizzo_xml_file_save(std::string filename)
+{
+	if(XML_SUCCESS == doc->SaveFile( filename.c_str(), false))
+		return true;
+
+	return false;
 }

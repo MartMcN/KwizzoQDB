@@ -93,6 +93,7 @@ void kwizzo_window::kwizzo_menubar()
             ImGui::Separator();
             if (ImGui::MenuItem("Save"))
             {
+                ptr_kwizzo_question->save_file();
             }
 
             if (ImGui::MenuItem("Quit", "Ctrl+Q"))
@@ -145,11 +146,7 @@ void kwizzo_window::kwizzo_windows_next_prev()
     // Why this work???
     UndoButtonWidth = ImGui::GetItemRectSize().x; //Get the actual width for next frame.
 
-
-
     ImGui::PopStyleColor(3);
-
-
 }
 
 void kwizzo_window::kwizzo_window_question()

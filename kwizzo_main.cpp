@@ -13,6 +13,7 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl2.h"
 #include <stdio.h>
+#include <string>
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include "kwizzo_xml.h"
@@ -82,8 +83,11 @@ int main(int, char**)
 
 	// KWIZZO KWIZZO
 	// Load the XML DB
+	std::string xml_to_open;
+	xml_to_open.assign(XML_FILE_NAME);
+
 	kwizzo_xml *kwizzo_db;
-	kwizzo_db = new kwizzo_xml();
+	kwizzo_db = new kwizzo_xml(xml_to_open);
 
 	// kwizzo questions
 	kwizzo_question *ptr_kwizzo;
