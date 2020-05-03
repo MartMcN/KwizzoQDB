@@ -1,7 +1,8 @@
 #include <cstddef>
 #include <iostream>
 #include <fstream>
-#include <string.h>
+#include <string>
+#include <time.h>
 #include "kwizzo_xml.h"
 #include "kwizzo.h"
 #include "kwizzo_ui.h"

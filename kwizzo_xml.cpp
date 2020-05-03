@@ -243,6 +243,7 @@ bool kwizzo_xml::kwizzo_xml_catagory(uint8_t index, char *buffer)
 bool kwizzo_xml::kwizzo_xml_rating(char *buffer)
 {
 	XMLElement *rating = NULL;
+	const char *rating_txt = NULL;
 
 	rating = quizz->FirstChildElement("rating");
 
@@ -258,11 +259,20 @@ bool kwizzo_xml::kwizzo_xml_rating(char *buffer)
 		}
 
 		rating->SetText("UNKNOW");
+
 	}
 
-	const char *rating_txt = rating->GetText();
+	// Get the rating element text
+	rating_txt = rating->GetText();
+
+	// If rating element is present but no text then rtn UNKOWN 
+	if (rating_txt == NULL)
+		rating_txt = "UNKNOWN";
+
+	// Copy in the result
 	strcpy(buffer, rating_txt);
 
+	// Debug
 	std::cout << __FILE__ << " Reading rating element : " << buffer << "\n";
 
 	return true;

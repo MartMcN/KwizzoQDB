@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "iostream"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
@@ -98,6 +99,7 @@ void kwizzo_window::kwizzo_menubar()
 
             if (ImGui::MenuItem("Quit", "Ctrl+Q"))
             {
+				std::exit(0);
             }
 
             ImGui::EndMenu();
@@ -110,8 +112,6 @@ void kwizzo_window::kwizzo_menubar()
 
 void kwizzo_window::kwizzo_windows_next_prev()
 {
-
-
     ImGui::PushStyleColor(ImGuiCol_Button, COLOR_OTHER_BUTTON);
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, COLOR_OTHER_HOVER);
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, COLOR_OTHER_ACTIVE);
