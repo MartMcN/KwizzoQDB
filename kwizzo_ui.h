@@ -13,6 +13,7 @@ private:
     void kwizzo_window_question();
     void kwizzo_window_rating();
     void kwizzo_window_catagory();
+    void kwizzo_edit_text();
 
     // Pointer to the kwizzo question object
     kwizzo_question *ptr_kwizzo_question;

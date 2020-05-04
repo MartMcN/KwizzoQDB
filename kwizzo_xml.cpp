@@ -278,6 +278,39 @@ bool kwizzo_xml::kwizzo_xml_rating(char *buffer)
 	return true;
 }
 
+
+bool kwizzo_xml::kwizzo_xml_update_question(char *buffer)
+{
+    XMLElement *question = NULL;
+
+    question = quizz->FirstChildElement("question");
+
+	if(question == NULL)
+	{
+		question = quizz->InsertNewChildElement("question");
+	}
+
+	question->SetText(buffer);
+
+	return true;
+}
+
+bool kwizzo_xml::kwizzo_xml_update_answer(char *buffer)
+{
+    XMLElement *answer = NULL;
+
+    answer = quizz->FirstChildElement("answer");
+
+	if(answer == NULL)
+	{
+		answer = quizz->InsertNewChildElement("answer");
+	}
+
+	answer->SetText(buffer);
+
+	return true;
+}
+
 bool kwizzo_xml::kwizzo_xml_delete_catagory()
 {
     XMLElement *catagory = NULL;

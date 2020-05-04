@@ -149,33 +149,210 @@ void kwizzo_window::kwizzo_windows_next_prev()
     ImGui::PopStyleColor(3);
 }
 
+static void format_text_for_input(char *in_text, char *out_text, float width)
+{
+    float pixels_per_char = 9.5;             // This is a bit crap martinmc
+    uint16_t max_chars_per_line = 0;
+
+    uint16_t char_count_line = 0;
+    uint16_t in_text_postion = 0;
+    uint16_t out_text_postion = 0;
+    uint16_t in_last_space_postion = 0;
+    uint16_t out_last_space_position = 0;
+
+    // Calc max chars per line
+    max_chars_per_line = width / pixels_per_char;
+
+    while (1)
+    {
+        //Looping till we get a null terminator (GOOD LORD !!!!! martinmc)
+        if (in_text[in_text_postion] == 0)
+        {
+            out_text[out_text_postion] = 0;
+            break;
+        }
+
+        // Copy over the character
+        out_text[out_text_postion] = in_text[in_text_postion];
+
+        // Remember the postion of the last space
+        if(in_text[in_text_postion] == ' ')
+        {
+            in_last_space_postion = in_text_postion;
+            out_last_space_position = out_text_postion;
+        }
+
+        // Update the indexs
+        out_text_postion++;
+        in_text_postion++;
+        char_count_line++;
+
+        if (char_count_line >= max_chars_per_line)
+        {
+            // Max chars per line reached, should rewind to the last space then add a CR after it.
+            char_count_line = 0;
+
+            out_text_postion = out_last_space_position + 1;
+            out_text[out_text_postion] = '\n';
+            out_text_postion++;
+
+            in_text_postion = in_last_space_postion + 1;
+        }
+    }
+}
+
+static void format_remove_cr_lf(char *out_text)
+{
+    float pixels_per_char = 10;
+    uint16_t max_chars_per_line = 0;
+
+    uint16_t scan_position = 0;
+    uint16_t position = 0;
+
+    while (1)   // Another good lord
+    {
+        if(out_text[scan_position] == '\n' || out_text[scan_position] == '\r')
+        {
+            // Replace the carrage returns and linefeeds with a space if none before it
+            // otherwise skip them.
+
+            if (out_text[scan_position - 1] != ' ' && scan_position)
+            {
+                out_text[position] = ' ';
+                position++;
+            }
+
+            scan_position++;
+        }
+        else
+        {
+            out_text[position] = out_text[scan_position];
+            scan_position++;
+            position++;
+        }
+        
+        if(out_text[position] == 0)
+            break;
+    }
+}
+
+
 void kwizzo_window::kwizzo_window_question()
 {
     // Q and A
-    //ImGui::InputTextMultiline("QUESTION", ptr_kwizzo_question->current_edited.question, IM_ARRAYSIZE(ptr_kwizzo_question->current_edited.question), ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 4) );
-    
+    static char out_textr[1024];
+    static float saved_window_x = ImGui::GetWindowWidth() - ImGui::GetStyle().ItemSpacing.x;
+    float window_x = (ImGui::GetWindowWidth() - ImGui::GetStyle().ItemSpacing.x);
+
     ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 
+    //
+    // QUESTION
+    //
     if (ImGui::TreeNode("QUESTION"))
     {
         ImGui::TextWrapped(ptr_kwizzo_question->current_edited.question);
-        
+
+        if(ImGui::Button("Edit"))
+        {
+            ImGui::OpenPopup("Question Edit");
+            format_text_for_input(ptr_kwizzo_question->current_edited.question, out_textr, window_x);
+        }
+
+        // POP UP
+        if (ImGui::BeginPopupModal("Question Edit", NULL, 0))
+        {
+            ImGui::SetCursorPosX(0);
+
+            // Only do this if the window changes size
+            if( saved_window_x != window_x)
+            {
+                saved_window_x = window_x;
+                format_text_for_input(ptr_kwizzo_question->current_edited.question, out_textr, window_x);
+            }
+
+            ImGui::InputTextMultiline("source", out_textr, 1024, ImVec2(window_x, ImGui::GetTextLineHeight() * 4), 0);
+
+             ImGui::Separator();
+            if (ImGui::Button("Update", ImVec2(120, 0)))
+            {
+                // Remove the formatting for the input text box and copy back
+                format_remove_cr_lf(out_textr);
+
+                strncpy(ptr_kwizzo_question->current_edited.question, out_textr, 1024);                
+
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::SameLine();
+
+            if (ImGui::Button("Cancel", ImVec2(120, 0)))
+            {
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+
         ImGui::TreePop();
     }
     
     ImGui::Separator();
 
-    //ImGui::InputTextMultiline("ANSWER", ptr_kwizzo_question->current_edited.answer, IM_ARRAYSIZE(ptr_kwizzo_question->current_edited.answer), ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 4) );
     ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 
+    //
+    // Answer
+    //
     if (ImGui::TreeNode("ANSWER"))
     {
         ImGui::TextWrapped(ptr_kwizzo_question->current_edited.answer);
+        if(ImGui::Button("Edit"))
+        {
+            ImGui::OpenPopup("Answer Edit");
+            format_text_for_input(ptr_kwizzo_question->current_edited.answer, out_textr, window_x);
+        }
+
+
+        // POP UP
+        if (ImGui::BeginPopupModal("Answer Edit", NULL, 0))
+        {
+            ImGui::SetCursorPosX(0);
+
+            // Only do this if the window changes size
+            if( saved_window_x != window_x)
+            {
+                saved_window_x = window_x;
+                format_text_for_input(ptr_kwizzo_question->current_edited.answer, out_textr, window_x);
+            }
+
+            ImGui::InputTextMultiline("source", out_textr, 1024, ImVec2(window_x, ImGui::GetTextLineHeight() * 4), 0);
+
+             ImGui::Separator();
+            if (ImGui::Button("Update", ImVec2(120, 0)))
+            {
+                // Remove the formatting for the input text box and copy back
+                format_remove_cr_lf(out_textr);
+
+                strncpy(ptr_kwizzo_question->current_edited.answer, out_textr, 1024);                
+
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::SameLine();
+
+            if (ImGui::Button("Cancel", ImVec2(120, 0)))
+            {
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+
         ImGui::TreePop();
     }
 
 }
-
 
 void kwizzo_window::kwizzo_window_rating()
 {
@@ -279,3 +456,7 @@ void kwizzo_window::kwizzo_window_catagory()
 }
 
 
+void kwizzo_window::kwizzo_edit_text()
+{
+
+}

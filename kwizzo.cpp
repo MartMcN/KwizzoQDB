@@ -117,29 +117,33 @@ void kwizzo_question::reload_question()
 
 void kwizzo_question::save_question()
 {
-    bool updated = false;
+    // check if question is updated
+    if(strncmp(current_edited.question, current.question, 1024) != 0)
+    {
+        std::cout << __FILE__<< " !!! Question updated !!!\n";
+        kwizzo_db->kwizzo_xml_update_question(current_edited.question); 
+    }
+
+    // check if answer is updated
+    if(strncmp(current_edited.answer, current.answer, 1024) != 0)
+    {
+        std::cout << __FILE__<< " !!! Answer updated !!!\n";
+        kwizzo_db->kwizzo_xml_update_answer(current_edited.answer); 
+    }
 
     // check is for changes in rating
     if(memcmp(current_edited.rating, current.rating, sizeof(current_edited.rating)) != 0)
     {
         std::cout << __FILE__<< " !!! rating updated !!!\n";
-        updated = true;
+        encode_xml_rating(current_edited.rating);
     }
     
     // check is for changes in catagory
-    if( !updated && memcmp(current_edited.catagory, current.catagory, sizeof(current_edited.catagory)) != 0)
+    if( memcmp(current_edited.catagory, current.catagory, sizeof(current_edited.catagory)) != 0)
     {
         std::cout << __FILE__<< " !!! catagory updated !!!\n";
-        updated = true;
-    }
-
-    if(updated)
-    {
-         std::cout << "updating..\n";
-        encode_xml_rating(current_edited.rating);
         encode_xml_catagory(current_edited.catagory);
     }
-
 }
 
 void kwizzo_question::decode_xml_rating(bool *rating_array)
@@ -307,6 +311,7 @@ bool filecopy(std::string fnamein, std::string fnameout)
         return false;
     }    
     fout << fin.rdbuf();
+
     return bool(fout);
 }
 
@@ -328,8 +333,7 @@ void kwizzo_question::save_file()
     // Before writing to the current file backup it up
     file_backup();
     
-    std::string filename;
-    filename.assign(XML_FILE_NAME);
+    std::string filename(XML_FILE_NAME);
 
     // Call the TinyXML2 to write the XML file
     kwizzo_db->kwizzo_xml_file_save(filename);
