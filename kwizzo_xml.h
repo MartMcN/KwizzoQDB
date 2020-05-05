@@ -8,7 +8,9 @@ public:
 
     bool kwizzo_xml_next_quiz();            // updates the quiz object pointer
     bool kwizzo_xml_prev_quiz();            // update the quiz object pointer
-    bool kwizz_xml_first_quiz();            // get the first quiz object
+    bool kwizz_xml_first_quiz();            // gets the first quiz object
+    bool kwizzo_xml_new_quiz();             // creates a new quiz
+    bool kwizzo_xml_delete_quiz();          // Delete a quiz
 
     bool kwizzo_xml_question(char *buffer);                     // Returns text of the question element
     bool kwizzo_xml_answer(char *buffer);                       // Returns text of the answer element

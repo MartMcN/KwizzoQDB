@@ -85,6 +85,7 @@ void kwizzo_window::kwizzo_menubar()
         {
             if (ImGui::MenuItem("New"))
             {
+                ptr_kwizzo_question->new_question();
             }
 
             if (ImGui::MenuItem("Open"))
@@ -131,19 +132,28 @@ void kwizzo_window::kwizzo_windows_next_prev()
     }
 
     const float ItemSpacing = ImGui::GetStyle().ItemSpacing.x;
-    static float UndoButtonWidth = 50.0f; //The 100.0f is just a guess size for the first frame.
+    static float UndoButtonWidth = 50.0f; //The 50.0f is just a guess size for the first frame.
+    static float DeletButtonWidth = 50.0f;
 
-    float pos = UndoButtonWidth + ItemSpacing;
+    float pos = UndoButtonWidth + ItemSpacing + DeletButtonWidth + ItemSpacing;
+
     ImGui::SameLine(ImGui::GetWindowWidth() - pos);
+    ImGui::Button("DELETE");
+    if(ImGui::IsItemActivated())
+    {
+        // Clear the question
+        ptr_kwizzo_question->clear_question();
+    }
+    // Why this work???
+    DeletButtonWidth = ImGui::GetItemRectSize().x; //Get the actual width for next frame.
 
+    ImGui::SameLine();
     ImGui::Button("UNDO");
     if(ImGui::IsItemActivated())
     {
         // reload the question
         ptr_kwizzo_question->reload_question();
     }
-
-    // Why this work???
     UndoButtonWidth = ImGui::GetItemRectSize().x; //Get the actual width for next frame.
 
     ImGui::PopStyleColor(3);

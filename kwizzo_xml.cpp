@@ -186,15 +186,70 @@ bool kwizzo_xml::kwizzo_xml_prev_quiz()
     return true;
 }
 
+
+bool kwizzo_xml::kwizzo_xml_new_quiz()
+{
+	// Stick in a new child element of the root
+	quizz = quizz_root->InsertNewChildElement("quizz");
+
+	if(quizz == NULL)
+	{
+		std::cout << "Failed to insert new element\n";
+	}
+	else
+	{
+		std::cout << "New element added\n";
+
+	}
+	
+	return true;
+}
+
+bool kwizzo_xml::kwizzo_xml_delete_quiz()
+{
+	// Need to get a node before deleting this one
+    XMLElement *nextnode;
+
+	nextnode = quizz->PreviousSiblingElement("quizz");
+	if(nextnode == NULL)
+	{
+		nextnode = quizz->NextSiblingElement("quizz");
+
+		if(nextnode == NULL)
+		{
+			nextnode = quizz_root->FirstChildElement("quizz");
+		}
+	}
+
+	quizz_root->DeleteChild(quizz);
+
+	quizz = nextnode;
+
+	return true;
+}
+
+
 bool kwizzo_xml::kwizzo_xml_question(char *buffer)
 {
     XMLElement *question;
 
     question = quizz->FirstChildElement("question");
-    const char *question_txt = question->GetText();
 
-    strcpy(buffer, question_txt);
+	if(question != NULL)
+	{
+		const char *question_txt = question->GetText();
 
+		if(question_txt != NULL)
+	    	strcpy(buffer, question_txt);
+		else
+			buffer[0] = 0;
+		
+	}
+	else
+	{
+		buffer[0] = 0;
+	}
+	
     return true;
 }
 
@@ -203,11 +258,27 @@ bool kwizzo_xml::kwizzo_xml_answer(char *buffer)
     XMLElement *answer;
     
     answer = quizz->FirstChildElement("answer");
-    const char *answer_txt = answer->GetText();
 
-    strcpy(buffer, answer_txt);
+	if (answer != NULL)
+	{
+		const char *answer_txt = answer->GetText();
 
-    return true;
+		if(answer_txt != NULL)
+		{
+			strcpy(buffer, answer_txt);
+		}
+		else
+		{
+					buffer[0] = 0;
+		}
+		
+	}
+	else
+	{
+		buffer[0] = 0;
+	}
+
+	return true;
 }
 
 bool kwizzo_xml::kwizzo_xml_catagory(uint8_t index, char *buffer)

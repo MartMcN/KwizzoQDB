@@ -96,12 +96,12 @@ void kwizzo_question::load_prev_question()
     memset(&current, 0, sizeof(kwizzo_question_t));
     memset(&current_edited, 0, sizeof(kwizzo_question_t));
 
-    // Stick in some data now
+    // Read the prev XML data
     kwizzo_db->kwizzo_xml_prev_quiz();
 
+    // Update the question structs
     kwizzo_db->kwizzo_xml_question(current.question);
     kwizzo_db->kwizzo_xml_answer(current.answer);
-
     decode_xml_rating(current.rating);
     decode_xml_catagory(current.catagory);
 
@@ -115,36 +115,70 @@ void kwizzo_question::reload_question()
     memcpy(&current_edited, &current, sizeof(kwizzo_question_t));
 }
 
+
+void kwizzo_question::clear_question()
+{
+    memset(&current_edited, 0, sizeof(kwizzo_question_t));
+}
+
 void kwizzo_question::save_question()
 {
-    // check if question is updated
-    if(strncmp(current_edited.question, current.question, 1024) != 0)
+    if (strlen(current_edited.question) == 0 && strlen(current_edited.answer) == 0)
     {
-        std::cout << __FILE__<< " !!! Question updated !!!\n";
-        kwizzo_db->kwizzo_xml_update_question(current_edited.question); 
+        // No text so delete it
+        kwizzo_db->kwizzo_xml_delete_quiz();
     }
+    else
+    {
 
-    // check if answer is updated
-    if(strncmp(current_edited.answer, current.answer, 1024) != 0)
-    {
-        std::cout << __FILE__<< " !!! Answer updated !!!\n";
-        kwizzo_db->kwizzo_xml_update_answer(current_edited.answer); 
-    }
+        // check if question is updated
+        if (strncmp(current_edited.question, current.question, 1024) != 0)
+        {
+            std::cout << __FILE__ << " !!! Question updated !!!\n";
+            kwizzo_db->kwizzo_xml_update_question(current_edited.question);
+        }
 
-    // check is for changes in rating
-    if(memcmp(current_edited.rating, current.rating, sizeof(current_edited.rating)) != 0)
-    {
-        std::cout << __FILE__<< " !!! rating updated !!!\n";
-        encode_xml_rating(current_edited.rating);
-    }
-    
-    // check is for changes in catagory
-    if( memcmp(current_edited.catagory, current.catagory, sizeof(current_edited.catagory)) != 0)
-    {
-        std::cout << __FILE__<< " !!! catagory updated !!!\n";
-        encode_xml_catagory(current_edited.catagory);
+        // Check if answer is updated
+        if (strncmp(current_edited.answer, current.answer, 1024) != 0)
+        {
+            std::cout << __FILE__ << " !!! Answer updated !!!\n";
+            kwizzo_db->kwizzo_xml_update_answer(current_edited.answer);
+        }
+
+        // Check rating changes
+        if (memcmp(current_edited.rating, current.rating, sizeof(current_edited.rating)) != 0)
+        {
+            std::cout << __FILE__ << " !!! rating updated !!!\n";
+            encode_xml_rating(current_edited.rating);
+        }
+
+        // Check Catagory Changes
+        if (memcmp(current_edited.catagory, current.catagory, sizeof(current_edited.catagory)) != 0)
+        {
+            std::cout << __FILE__ << " !!! catagory updated !!!\n";
+            encode_xml_catagory(current_edited.catagory);
+        }
     }
 }
+
+void kwizzo_question::new_question()
+{
+    // Initalise the curent question
+    memset(&current, 0, sizeof(kwizzo_question_t));
+    memset(&current_edited, 0, sizeof(kwizzo_question_t));
+
+    // Create an empty quizz element
+    kwizzo_db->kwizzo_xml_new_quiz();
+    
+    kwizzo_db->kwizzo_xml_question(current.question);
+    //kwizzo_db->kwizzo_xml_answer(current.answer);
+    decode_xml_rating(current.rating);
+    decode_xml_catagory(current.catagory);
+    
+    // Copy over to the edited version
+    memcpy(&current_edited, &current, sizeof(kwizzo_question_t));
+}
+
 
 void kwizzo_question::decode_xml_rating(bool *rating_array)
 {
@@ -277,9 +311,6 @@ const char *kwizzo_question::get_catagory_text(uint8_t index)
 
     return catagorys[index].cat_string;
 }
-
-
-
 
 
 std::string datetime()

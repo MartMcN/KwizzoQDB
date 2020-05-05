@@ -23,9 +23,10 @@ public:
 
     void load_next_question();
     void load_prev_question();
-    void reload_question();
-    void save_question();
-    void undo_changes();
+    void reload_question();                             // undo any changes to a question
+    void clear_question();                              // Clears edited data                             
+    void save_question();                               // Saves any changes to the xml
+    void new_question();
 
     // File Operations
     void save_file();
