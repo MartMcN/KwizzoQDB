@@ -13,6 +13,8 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl2.h"
 #include <stdio.h>
+#include <iostream>
+#include <fstream>
 #include <string>
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -80,6 +82,11 @@ int main(int, char**)
 	bool show_demo_window = true;
 	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+	// cout rdirect
+	std::ofstream out("./resources/debug_log.txt");
+    std::streambuf *coutbuf = std::cout.rdbuf();
+    std::cout.rdbuf(out.rdbuf());
 
 	// KWIZZO KWIZZO
 	// Load the XML DB
@@ -180,6 +187,8 @@ int main(int, char**)
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 
+    std::cout.rdbuf(coutbuf);
+	out.close();
 	return 0;
 }
 
