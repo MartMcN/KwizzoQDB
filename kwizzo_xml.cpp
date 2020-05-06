@@ -190,7 +190,8 @@ bool kwizzo_xml::kwizzo_xml_prev_quiz()
 bool kwizzo_xml::kwizzo_xml_new_quiz()
 {
 	// Stick in a new child element of the root
-	quizz = quizz_root->InsertNewChildElement("quizz");
+    XMLElement* node = doc->NewElement("quizz");
+	quizz = (tinyxml2::XMLElement*)quizz_root->InsertFirstChild( node );
 
 	if(quizz == NULL)
 	{
