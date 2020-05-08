@@ -26,10 +26,11 @@
 #define COLOR_OTHER_HOVER ((ImVec4)ImColor::HSV(0.3f, 0.6f, 0.6f))
 #define COLOR_OTHER_ACTIVE ((ImVec4)ImColor::HSV(0.3f, 0.8f, 0.8f))
 
-kwizzo_window::kwizzo_window(kwizzo_question *ptr, int width)
+kwizzo_window::kwizzo_window(kwizzo_question *ptr, int width, int height)
 {
     ptr_kwizzo_question = ptr;
     window_width = width;
+    window_height = height;
     window();
 }
 
@@ -52,7 +53,7 @@ void kwizzo_window::window()
 
     ImGui::Begin("KWIZZO!", &p_open, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_MenuBar);
 
-    ImGui::SetWindowSize(ImVec2(window_width, 800));
+    ImGui::SetWindowSize(ImVec2(window_width, window_height));
 
     // Menubar
     kwizzo_menubar();
@@ -66,12 +67,20 @@ void kwizzo_window::window()
     kwizzo_window_question();
     ImGui::Separator();
 
-    // Ratings
-    kwizzo_window_rating();
-    ImGui::Separator();
 
-    // Catagory
-    kwizzo_window_catagory();
+    ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+
+    if (ImGui::TreeNode("RATING/CATAGORY"))
+    {
+        // Ratings
+        kwizzo_window_rating();
+        ImGui::Separator();
+
+        // Catagory
+        kwizzo_window_catagory();
+
+        ImGui::TreePop();
+    }
 
     ImGui::End();
 }
@@ -83,16 +92,6 @@ void kwizzo_window::kwizzo_menubar()
     {
         if (ImGui::BeginMenu("Menu"))
         {
-            if (ImGui::MenuItem("New"))
-            {
-                ptr_kwizzo_question->new_question();
-            }
-
-            if (ImGui::MenuItem("Open"))
-            {
-            }
-
-            ImGui::Separator();
             if (ImGui::MenuItem("Save"))
             {
                 ptr_kwizzo_question->save_file();
@@ -123,12 +122,19 @@ void kwizzo_window::kwizzo_windows_next_prev()
         ptr_kwizzo_question->load_prev_question();
     }
 
+
     ImGui::SameLine();
-    
     ImGui::Button("NEXT");
     if(ImGui::IsItemActivated())
     {
         ptr_kwizzo_question->load_next_question();
+    }
+
+    ImGui::SameLine();
+    ImGui::Button("NEW");
+    if(ImGui::IsItemActivated())
+    {
+        ptr_kwizzo_question->new_question();
     }
 
     const float ItemSpacing = ImGui::GetStyle().ItemSpacing.x;
@@ -309,7 +315,7 @@ void kwizzo_window::kwizzo_window_question()
     
     ImGui::Separator();
 
-    ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+    ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 
     //
     // Answer

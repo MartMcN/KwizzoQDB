@@ -1,7 +1,7 @@
 class kwizzo_window
 {
 public:
-    kwizzo_window(kwizzo_question *ptr, int width);
+    kwizzo_window(kwizzo_question *ptr, int width, int height);
     ~kwizzo_window();
 
     void window();
@@ -20,4 +20,5 @@ private:
 
     // Windows width for dynamic resize
     int  window_width;
+    int  window_height;
 };

@@ -166,7 +166,7 @@ int main(int, char**)
 		int w, h;
 		SDL_GetWindowSize(window, &w, &h);
 
-		kwizzo_window qa_window(ptr_kwizzo, w);
+		kwizzo_window qa_window(ptr_kwizzo, w, h);
 
 		// Rendering
 		ImGui::Render();
