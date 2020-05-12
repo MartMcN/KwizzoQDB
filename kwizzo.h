@@ -2,8 +2,8 @@
 #define MAX_RATINGS     3
 #define MAX_CATAGORIES  12
 
-#define XML_FILE_NAME             "./resources/quiz_2020_04_25_a.xml"
-#define XML_FILE_NAME_PARTIAL     "./resources/quiz"    
+#define XML_FILE_NAME             "./resources/quiz.xml"
+#define XML_FILE_NAME_PARTIAL     "./resources/quiz_backup_"    
 
 typedef struct {
     char            question[MAX_TEXT];

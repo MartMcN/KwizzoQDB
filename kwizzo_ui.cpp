@@ -51,7 +51,7 @@ void kwizzo_window::window()
     window_postion.y = 0;
     ImGui::SetNextWindowPos(window_postion);
 
-    ImGui::Begin("KWIZZO!", &p_open, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_MenuBar);
+    ImGui::Begin("KWIZZO", &p_open, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_MenuBar);
 
     ImGui::SetWindowSize(ImVec2(window_width, window_height));
 
