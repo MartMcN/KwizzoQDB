@@ -137,7 +137,7 @@ kwizzo_xml::kwizzo_xml(std::string xml_file_name)
     if (!errorID)
     {
         quizz_root = kwizzo_xml::doc->RootElement();
-        quizz = quizz_root->FirstChildElement("quizz");
+		quizz = quizz_root->LastChildElement("quizz");
     }
 }
 
@@ -190,8 +190,7 @@ bool kwizzo_xml::kwizzo_xml_prev_quiz()
 bool kwizzo_xml::kwizzo_xml_new_quiz()
 {
 	// Stick in a new child element of the root
-    XMLElement* node = doc->NewElement("quizz");
-	quizz = (tinyxml2::XMLElement*)quizz_root->InsertFirstChild( node );
+	quizz = quizz_root->InsertNewChildElement("quizz");
 
 	if(quizz == NULL)
 	{
