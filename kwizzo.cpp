@@ -163,6 +163,9 @@ void kwizzo_question::save_question()
 
 void kwizzo_question::new_question()
 {
+    // Save any updates to the current question
+    save_question();
+
     // Initalise the curent question
     memset(&current, 0, sizeof(kwizzo_question_t));
     memset(&current_edited, 0, sizeof(kwizzo_question_t));
