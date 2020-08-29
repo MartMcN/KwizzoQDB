@@ -1,5 +1,5 @@
 #define MAX_TEXT        1024
-#define MAX_RATINGS     3
+#define MAX_RATINGS     4
 #define MAX_CATAGORIES  12
 
 #define XML_FILE_NAME             "./resources/quiz.xml"

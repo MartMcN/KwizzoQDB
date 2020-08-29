@@ -213,6 +213,11 @@ void kwizzo_question::decode_xml_rating(bool *rating_array)
             rating_array[2] = true;
             std::cout << __FILE__ << " HARD = TRUE\n";
         }
+        else if(strcmp(rating_txt, "KIDS") == 0 )
+        {
+            rating_array[3] = true;
+            std::cout << __FILE__ << " KIDS = TRUE\n";
+        }
     }
 
     std::cout << __FILE__ << " Rating Array: " << rating_txt << "\n";
@@ -273,8 +278,11 @@ void kwizzo_question::encode_xml_rating(bool *rating_array)
             }
             else if (index == 2)
             {
-
 				strncpy(rating_txt, "HARD", 5);
+            }
+            else if (index == 3)
+            {
+				strncpy(rating_txt, "KIDS", 5);
             }
             
             break;

@@ -11,6 +11,7 @@
 #define KIWZZO_EASY     0
 #define KWIZZO_MEDIUM   1
 #define KWIZZO_HARD     2
+#define KWIZZO_KIDS     3
 
 
 // BUTTONS FOR SELECTION
@@ -406,6 +407,10 @@ void kwizzo_window::kwizzo_window_rating()
             ImGui::Button("HARD");
             break;
 
+            case KWIZZO_KIDS:
+            ImGui::Button("KIDS");
+            break;
+
             default:
                 break;
         }
@@ -417,6 +422,7 @@ void kwizzo_window::kwizzo_window_rating()
             ptr_kwizzo_question->current_edited.rating[KIWZZO_EASY] = false;
             ptr_kwizzo_question->current_edited.rating[KWIZZO_MEDIUM] = false;
             ptr_kwizzo_question->current_edited.rating[KWIZZO_HARD] = false;
+            ptr_kwizzo_question->current_edited.rating[KWIZZO_KIDS] = false;
             ptr_kwizzo_question->current_edited.rating[index] = true;
         }
 
